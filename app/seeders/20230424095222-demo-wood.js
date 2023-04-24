@@ -79,56 +79,56 @@ module.exports = {
     await queryInterface.bulkInsert('Woods', [
       {
         name: "Épicéa",
-        type: softwood,
-        hardness: tender,
+        typeId: softwood,
+        hardnessId: tender,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Pin",
-        type: softwood,
-        hardness: medium,
+        typeId: softwood,
+        hardnessId: medium,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Padouk",
-        type: exotic,
-        hardness: hard,
+        typeId: exotic,
+        hardnessId: hard,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Érable",
-        type: noble,
-        hardness: medium,
+        typeId: noble,
+        hardnessId: medium,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Hêtre",
-        type: noble,
-        hardness: medium,
+        typeId: noble,
+        hardnessId: medium,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Itauba",
-        type: exotic,
-        hardness: hard,
+        typeId: exotic,
+        hardnessId: hard,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: "Douglas",
-        type: softwood,
-        hardness: tender,
+        typeId: softwood,
+        hardnessId: tender,
         image: null,
         createdAt: new Date(),
         updatedAt: new Date()

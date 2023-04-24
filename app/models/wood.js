@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+// A model "Wood" with a string name, a string image, and a foreign key to a "Type" and a "Hardness"
 module.exports = (sequelize, DataTypes) => {
   class Wood extends Model {
     /**
@@ -8,29 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Wood.belongsTo(models.Type, { foreignKey: "typeId" });
-      Wood.belongsTo(models.Hardness, { foreignKey: "hardnessId" });
+      Wood.belongsTo(models.Type, {
+        foreignKey: "typeId",
+        as: "type",
+        onDelete: "CASCADE",
+      });
+      Wood.belongsTo(models.Hardness, {
+        foreignKey: "hardnessId",
+        as: "hardness",
+        onDelete: "CASCADE",
+      });
     }
   }
   Wood.init(
     {
       name: DataTypes.STRING,
-      typeId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Type",
-          key: "id",
-        },
-      },
-      hardnessId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Hardness",
-          key: "id",
-        },
-      },
       image: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -42,4 +35,4 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   return Wood;
-};
+}
