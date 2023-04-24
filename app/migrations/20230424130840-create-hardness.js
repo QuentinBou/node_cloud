@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Woods', {
+    await queryInterface.createTable('Hardnesses', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,16 +11,6 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING
-      },
-      type: {
-        type: Sequelize.ENUM("softwood", "exotic wood", "noble and hardwoods")
-      },
-      hardness: {
-        type: Sequelize.ENUM("tender", "medium-hard", "hard")
-      },
-      image: {
-        type: Sequelize.STRING,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -33,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Woods');
+    await queryInterface.dropTable('Hardnesses');
   }
 };

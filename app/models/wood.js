@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Wood extends Model {
     /**
@@ -10,16 +8,38 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Wood.belongsTo(models.Type, { foreignKey: "typeId" });
+      Wood.belongsTo(models.Hardness, { foreignKey: "hardnessId" });
     }
   }
-  Wood.init({
-    name: DataTypes.STRING,
-    type: DataTypes.ENUM("softwood", "exotic wood", "noble and hardwoods"),
-    hardness: DataTypes.ENUM("tender", "medium-hard", "hard")
-  }, {
-    sequelize,
-    modelName: 'Wood',
-  });
+  Wood.init(
+    {
+      name: DataTypes.STRING,
+      typeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Type",
+          key: "id",
+        },
+      },
+      hardnessId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Hardness",
+          key: "id",
+        },
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Wood",
+    }
+  );
   return Wood;
 };

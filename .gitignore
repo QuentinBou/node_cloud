@@ -3,7 +3,9 @@
 
 ### dotenv ###
 .env
-/config
+
+### uploads ###
+uploads/*
 
 ### Node ###
 # Logs
