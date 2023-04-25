@@ -1,13 +1,15 @@
 const { User } = require("../models/index");
-require("dotenv").config("../config/.env");
+require("dotenv").config();
+const crypto = require("../middleware/crypto.middleware");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 exports.register = async (req, res) => {
   try {
-    const newUser = {
+    const newUser = await {
       ...req.body,
-      password: bcrypt.hashSync(req.body.password, 10),
+      email: await crypto.encrypt(req.body.email),
+      password: await bcrypt.hash(req.body.password, 10),
     };
     const createdUser = await User.create(newUser);
     await createdUser.save();
@@ -19,17 +21,21 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const userEmail = req.body.email;
+    const userEmail = await crypto.encrypt(req.body.email);
     const userPassword = req.body.password;
 
-    const user = await User.findOne({ where: { email: userEmail } });
-    const passwordIsValid = bcrypt.compareSync(userPassword, user.password);
+    const user = await User.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
+    const passwordIsValid = await bcrypt.compare(userPassword, user.password);
     if (!passwordIsValid) {
-      return res.status(401).json({ auth: false, token: null });
+      throw new Error("Password is not valid");
     } else {
       const userDatas = {
         id: user.id,
-        email: user.email,
+        email: await crypto.decrypt(user.email),
         firstName: user.firstName,
         lastName: user.lastName,
       };
@@ -39,10 +45,8 @@ exports.login = async (req, res) => {
       return res.status(200).json({ ...userDatas, token: userJwt });
     }
   } catch (error) {
-    return res
-      .status(400)
-      .json({
-        message: "Authentification failed, please check your credentials...",
-      });
+    return res.status(400).json({
+      message: error.message || "User can not be logged in",
+    });
   }
 };

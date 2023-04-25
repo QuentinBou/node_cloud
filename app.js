@@ -3,6 +3,9 @@ const app = express();
 const db = require("./app/models/index");
 const router = require('./app/routes/index');
 const path = require('path');
+const YAML = require("yamljs")
+const swaggerUi = require('swagger-ui-express');
+const swagger = YAML.load("./swagger.yaml")
 
 
 db.sequelize.authenticate().then(() => {
@@ -15,5 +18,9 @@ app.use(express.json());
 
 app.use('/api', router)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swagger));
+
 
 module.exports = app;

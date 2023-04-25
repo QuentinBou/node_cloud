@@ -1,4 +1,5 @@
 const { Wood, Type, Hardness } = require("../models");
+const { handleErrors, deleteImage } = require("../utils/wood.utils");
 const fs = require("fs");
 
 exports.getWoods = async (req, res) => {
@@ -24,18 +25,26 @@ exports.getWoodByHardness = async (req, res) => {
 };
 
 exports.createWood = async (req, res) => {
-  let newWood = {
-    ...JSON.parse(req.body.datas),
-  }
-  if (req.file) {
-    const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-    newWood = {
-      ...newWood,
-      image: pathname,
-    };
-  }
+  let errors = null;
 
   try {
+    let newWood = {
+      ...JSON.parse(req.body.datas),
+    }
+
+    errors = handleErrors(newWood);
+    if (errors !== null) {
+      throw new Error();
+    }
+    
+    if (req.file) {
+      const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+      newWood = {
+        ...newWood,
+        image: pathname,
+      };
+    }
+
     const type = await Type.findByPk(newWood.typeId);
     const hardness = await Hardness.findByPk(newWood.hardnessId);
     const createdWood = await Wood.create(newWood);
@@ -44,7 +53,7 @@ exports.createWood = async (req, res) => {
     await createdWood.setHardness(hardness);
     return res.status(201).json(createdWood);
   } catch (error) {
-    return res.status(400).json({ message: "Wood can not be created" });
+    return res.status(400).json({ ...errors } || { message: "Wood can not be created" });
   }
 }
 
@@ -52,18 +61,24 @@ exports.updateWood = async (req, res) => {
   let updatedWood = {
     ...JSON.parse(req.body.datas),
   }
-  if (req.file) {
-    const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-    updatedWood = {
-      ...updatedWood,
-      image: pathname,
-    };
-  }
 
   try {
     const type = await Type.findByPk(updatedWood.typeId);
     const hardness = await Hardness.findByPk(updatedWood.hardnessId);
     const wood = await Wood.findByPk(req.params.id);
+
+    if (req.file) {
+      const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+      updatedWood = {
+        ...updatedWood,
+        image: pathname,
+      };
+      if (wood.image) {
+        deleteImage(wood);
+      }
+    } else if (!req.file && wood.image) {
+      deleteImage(wood);
+    }
 
     await wood.update(updatedWood);
     await wood.setType(type);
