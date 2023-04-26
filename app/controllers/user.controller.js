@@ -36,12 +36,9 @@ exports.login = async (req, res) => {
     if (!passwordIsValid) {
       throw new Error('Password is not valid');
     } else {
-      const userDatas = {
-        id: user.id,
-        email: await crypto.decrypt(user.email),
-        firstName: user.firstName,
-        lastName: user.lastName,
-      };
+      const userDatas = user.dataValues;
+      delete userDatas.password;
+      userDatas.email = await crypto.decrypt(userDatas.email);
       const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET, {
         expiresIn: '1h',
       });
