@@ -7,10 +7,10 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
         type: Sequelize.STRING,
@@ -18,20 +18,20 @@ module.exports = {
       },
       typeId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       hardnessId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.addConstraint('Woods', {
@@ -40,10 +40,10 @@ module.exports = {
       name: 'fk_wood_type',
       references: {
         table: 'Types',
-        field: 'id'
+        field: 'id',
       },
       onDelete: 'cascade',
-      onUpdate: 'cascade'
+      onUpdate: 'cascade',
     });
 
     await queryInterface.addConstraint('Woods', {
@@ -52,13 +52,13 @@ module.exports = {
       name: 'fk_wood_hardness',
       references: {
         table: 'Hardnesses',
-        field: 'id'
+        field: 'id',
       },
       onDelete: 'cascade',
-      onUpdate: 'cascade'
+      onUpdate: 'cascade',
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Woods');
-  }
+  },
 };

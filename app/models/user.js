@@ -1,6 +1,8 @@
+/* eslint-disable valid-jsdoc */
+/* eslint-disable require-jsdoc */
 'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -31,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
   }, {
     sequelize,
     modelName: 'User',

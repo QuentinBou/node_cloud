@@ -1,9 +1,9 @@
-const { User } = require("../models/index");
-require("dotenv").config();
-const crypto = require("../middleware/crypto.middleware");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const logger = require("../utils/logger.utils");
+const {User} = require('../models/index');
+require('dotenv').config();
+const crypto = require('../middleware/crypto.middleware');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const logger = require('../utils/logger.utils');
 
 exports.register = async (req, res) => {
   try {
@@ -14,11 +14,11 @@ exports.register = async (req, res) => {
     };
     const createdUser = await User.create(newUser);
     await createdUser.save();
-    logger.info(`User ${createdUser.id} has been created`)
+    logger.info(`User ${createdUser.id} has been created`);
     return res.status(201).json(createdUser);
   } catch (error) {
-    logger.error(error.message)
-    return res.status(400).json({ message: "User can not be created" });
+    logger.error(error.message);
+    return res.status(400).json({message: 'User can not be created'});
   }
 };
 
@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
     });
     const passwordIsValid = await bcrypt.compare(userPassword, user.password);
     if (!passwordIsValid) {
-      throw new Error("Password is not valid");
+      throw new Error('Password is not valid');
     } else {
       const userDatas = {
         id: user.id,
@@ -42,16 +42,16 @@ exports.login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
       };
-      const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET || "secret", {
-        expiresIn: "1h",
+      const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET || 'secret', {
+        expiresIn: '1h',
       });
-      logger.info(`User ${userDatas.id} has logged in`)
-      return res.status(200).json({ ...userDatas, token: userJwt });
+      logger.info(`User ${userDatas.id} has logged in`);
+      return res.status(200).json({...userDatas, token: userJwt});
     }
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
     return res.status(400).json({
-      message: error.message || "User can not be logged in",
+      message: error.message || 'User can not be logged in',
     });
   }
 };

@@ -7,7 +7,7 @@ const options = {
     info: {
       title: 'Mon API Woods',
       version: '1.0.0',
-      description: "API d'exercice en relation avec le bois",
+      description: 'API d\'exercice en relation avec le bois',
     },
     servers: [
       {
@@ -15,7 +15,7 @@ const options = {
       },
     ],
   },
-  apis: ['./app/routes/*.js'], 
+  apis: ['./app/routes/*.js'],
 };
 
 const specs = swaggerJsDoc(options);

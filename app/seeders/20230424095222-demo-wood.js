@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Hardnesses', [
       {
         name: 'Tender',
@@ -17,25 +17,25 @@ module.exports = {
         name: 'Hard',
         createdAt: new Date(),
         updatedAt: new Date(),
-      }
+      },
     ], {});
 
     const tender = await queryInterface.rawSelect('Hardnesses', {
       where: {
-        name: 'Tender'
-      }
+        name: 'Tender',
+      },
     }, ['id']);
 
     const medium = await queryInterface.rawSelect('Hardnesses', {
       where: {
-        name: 'Medium-hard'
-      }
+        name: 'Medium-hard',
+      },
     }, ['id']);
 
     const hard = await queryInterface.rawSelect('Hardnesses', {
       where: {
-        name: 'Hard'
-      }
+        name: 'Hard',
+      },
     }, ['id']);
 
     await queryInterface.bulkInsert('Types', [
@@ -58,87 +58,86 @@ module.exports = {
 
     const softwood = await queryInterface.rawSelect('Types', {
       where: {
-        name: 'Softwood'
-      }
+        name: 'Softwood',
+      },
     }, ['id']);
 
     const exotic = await queryInterface.rawSelect('Types', {
       where: {
-        name: 'Exotic Wood'
-      }
+        name: 'Exotic Wood',
+      },
     }, ['id']);
 
     const noble = await queryInterface.rawSelect('Types', {
       where: {
-        name: 'Noble and Hardwoods'
-      }
+        name: 'Noble and Hardwoods',
+      },
     }, ['id']);
 
 
-    
     await queryInterface.bulkInsert('Woods', [
       {
-        name: "Épicéa",
+        name: 'Épicéa',
         typeId: softwood,
         hardnessId: tender,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Pin",
+        name: 'Pin',
         typeId: softwood,
         hardnessId: medium,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Padouk",
+        name: 'Padouk',
         typeId: exotic,
         hardnessId: hard,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Érable",
+        name: 'Érable',
         typeId: noble,
         hardnessId: medium,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Hêtre",
+        name: 'Hêtre',
         typeId: noble,
         hardnessId: medium,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Itauba",
+        name: 'Itauba',
         typeId: exotic,
         hardnessId: hard,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
-        name: "Douglas",
+        name: 'Douglas',
         typeId: softwood,
         hardnessId: tender,
         image: null,
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     ], {});
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('Types', null, {});
     await queryInterface.bulkDelete('Hardnesses', null, {});
     await queryInterface.bulkDelete('Woods', null, {});
-  }
+  },
 };

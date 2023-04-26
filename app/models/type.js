@@ -1,5 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
+/* eslint-disable valid-jsdoc */
+/* eslint-disable require-jsdoc */
+'use strict';
+const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Type extends Model {
     /**
@@ -9,19 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Type.hasMany(models.Wood, {
-        foreignKey: "typeId",
-        as: "woods",
+        foreignKey: 'typeId',
+        as: 'woods',
       });
     }
   }
   Type.init(
-    {
-      name: DataTypes.STRING,
-    },
-    {
-      sequelize,
-      modelName: "Type",
-    }
+      {
+        name: DataTypes.STRING,
+      },
+      {
+        sequelize,
+        modelName: 'Type',
+      },
   );
   return Type;
 };
