@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
       };
-      const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET || 'secret', {
+      const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET, {
         expiresIn: '1h',
       });
       logger.info(`User ${userDatas.id} has logged in`);
