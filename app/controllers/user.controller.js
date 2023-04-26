@@ -3,6 +3,7 @@ require("dotenv").config();
 const crypto = require("../middleware/crypto.middleware");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const logger = require("../utils/logger.utils");
 
 exports.register = async (req, res) => {
   try {
@@ -13,8 +14,10 @@ exports.register = async (req, res) => {
     };
     const createdUser = await User.create(newUser);
     await createdUser.save();
+    logger.info(`User ${createdUser.id} has been created`)
     return res.status(201).json(createdUser);
   } catch (error) {
+    logger.error(error.message)
     return res.status(400).json({ message: "User can not be created" });
   }
 };
@@ -42,9 +45,11 @@ exports.login = async (req, res) => {
       const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET || "secret", {
         expiresIn: "1h",
       });
+      logger.info(`User ${userDatas.id} has logged in`)
       return res.status(200).json({ ...userDatas, token: userJwt });
     }
   } catch (error) {
+    logger.error(error.message)
     return res.status(400).json({
       message: error.message || "User can not be logged in",
     });

@@ -6,7 +6,7 @@ const path = require('path');
 const YAML = require("yamljs")
 const swaggerUi = require('swagger-ui-express');
 const swagger = YAML.load("./swagger.yaml")
-
+const limiter = require('./app/utils/limiter.utils');
 
 db.sequelize.authenticate().then(() => {
     console.log('Database connected...');
@@ -16,7 +16,7 @@ db.sequelize.authenticate().then(() => {
 
 app.use(express.json());
 
-app.use('/api', router)
+app.use('/api', limiter.limiterApi, router)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 app.use('/api-docs', swaggerUi.serve);
