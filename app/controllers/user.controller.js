@@ -15,8 +15,17 @@ exports.register = async (req, res) => {
     };
     const createdUser = await User.create(newUser);
     await createdUser.save();
+
+    const userDatas = await addLinksToUser(req, createdUser.dataValues);
+    delete userDatas.password;
+    userDatas.email = await crypto.decrypt(userDatas.email);
+
+    const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
     logger.info(`User ${createdUser.id} has been created`);
-    return res.status(201).json(createdUser);
+    return res.status(201).json({...userDatas, token: userJwt});
   } catch (error) {
     logger.error(error.message);
     return res.status(400).json({message: 'User can not be created'});
@@ -59,10 +68,10 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.updateEmail = async (req, res) => {
+exports.updateUser = async (req, res) => {
   try {
-    const userEmail = await crypto.encrypt(req.body.email);
-    const newEmail = await crypto.encrypt(req.body.newEmail);
+    const {firstName, lastName, email, newEmail} = req.body;
+    const userEmail = await crypto.encrypt(email);
 
     const user = await User.findOne({
       where: {
@@ -70,11 +79,37 @@ exports.updateEmail = async (req, res) => {
       },
     });
 
-    user.email = newEmail;
-    await user.save();
+    const userInfosUpdated = {
+      ...user.dataValues,
+      firstName: firstName ? firstName : user.firstName,
+      lastName: lastName ? lastName : user.lastName,
+      email: await crypto.encrypt(newEmail ?
+         newEmail : email),
+    };
 
-    logger.info(`User ${user.id} has updated his email`);
-    return res.status(200).json({success: true, message: 'Email updated'});
+    const existingEmail = await User.findOne({
+      where: {
+        email: userInfosUpdated.email,
+        id: userInfosUpdated.id,
+      },
+    });
+
+    if (existingEmail && existingEmail.id !== userInfosUpdated.id) {
+      throw new Error('Email already exists');
+    }
+
+    await user.update(userInfosUpdated);
+
+    const userDatas = await addLinksToUser(req, userInfosUpdated);
+    delete userDatas.password;
+    userDatas.email = await crypto.decrypt(userDatas.email);
+
+    const userJwt = jwt.sign(userDatas, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    logger.info(`User ${userDatas.id} has been updated`);
+    return res.status(200).json({...userDatas, token: userJwt});
   } catch (error) {
     logger.error(error.message);
     return res.status(400).json({

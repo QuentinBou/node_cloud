@@ -6,7 +6,7 @@ const isOwner = require('../middleware/isOwner.middleware');
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
-router.put('/update-email', isOwner, userController.updateEmail);
+router.put('/update', isOwner, userController.updateUser);
 router.put('/update-password', isOwner, userController.updatePassword);
 router.delete('/delete', isOwner, userController.deleteUser);
 
