@@ -7,7 +7,7 @@ const logger = require('../utils/logger.utils');
 
 exports.register = async (req, res) => {
   try {
-    const newUser = await {
+    const newUser = {
       ...req.body,
       email: await crypto.encrypt(req.body.email),
       password: await bcrypt.hash(req.body.password, 10),

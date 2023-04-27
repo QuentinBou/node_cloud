@@ -116,7 +116,9 @@ exports.createWood = async (req, res) => {
     logger.error(error.message);
     return res
         .status(400)
-        .json({...errors} || {message: 'Wood can not be created'});
+        .json(errors !== null ?
+           {...errors} :
+           {message: 'Wood can not be created'});
   }
 };
 
@@ -127,12 +129,10 @@ exports.updateWood = async (req, res) => {
 
   try {
     const wood = await Wood.findByPk(req.params.id);
-    console.log(req.file);
     if (req.file) {
       const pathname = `${req.protocol}://${req.get('host')}/uploads/${
         req.file.filename
       }`;
-      console.log(pathname);
       updatedWood = {
         ...updatedWood,
         image: pathname,
