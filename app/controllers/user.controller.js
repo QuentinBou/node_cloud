@@ -4,6 +4,7 @@ const crypto = require('../middleware/crypto.middleware');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const logger = require('../utils/logger.utils');
+const {isUser} = require('../utils/users.utils');
 
 exports.register = async (req, res) => {
   try {
@@ -49,6 +50,77 @@ exports.login = async (req, res) => {
     logger.error(error.message);
     return res.status(400).json({
       message: error.message || 'User can not be logged in',
+    });
+  }
+};
+
+exports.updateEmail = async (req, res) => {
+  try {
+    const userEmail = await crypto.encrypt(req.body.email);
+    const hasPermission = isUser(req.headers.authorization, userEmail);
+    const newEmail = await crypto.encrypt(req.body.newEmail);
+
+    if (!hasPermission) {
+      throw new Error('You are not allowed to update this email');
+    } else {
+      const user = await User.findOne({
+        where: {
+          email: userEmail,
+        },
+      });
+
+      user.email = newEmail;
+      await user.save();
+
+      logger.info(`User ${user.id} has updated his email`);
+      return res.status(200).json({success: true, message: 'Email updated'});
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(400).json({
+      message: error.message || 'Something went wrong',
+    });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const userEmail = await crypto.encrypt(req.body.email);
+    const hasPermission = isUser(req.headers.authorization, userEmail);
+
+    if (!hasPermission) {
+      throw new Error('You are not allowed to update this password');
+    } else {
+      const userPassword = req.body.password;
+      const newPassword = req.body.newPassword;
+      const newPasswordValidate = req.body.newPasswordValidate;
+
+      const user = await User.findOne({
+        where: {
+          email: userEmail,
+        },
+      });
+
+      const passwordIsEqual = await bcrypt.compare(userPassword, user.password);
+
+      if (!passwordIsEqual) {
+        throw new Error('Password is not valid');
+      } else if (newPassword === newPasswordValidate) {
+        const newPasswordHashed = await bcrypt.hash(newPassword, 10);
+        user.password = newPasswordHashed;
+        await user.save();
+        logger.info(`User ${user.id} has updated his password`);
+        return res
+            .status(200)
+            .json({success: true, message: 'Password updated'});
+      } else {
+        throw new Error('Passwords are not equals');
+      }
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(400).json({
+      message: error.message || 'Something went wrong',
     });
   }
 };

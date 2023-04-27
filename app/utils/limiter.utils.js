@@ -14,7 +14,7 @@ exports.limiterApi = rateLimit({
 
 exports.limiterAuth = rateLimit({
   windowMs: 5 * 60 * 1000,
-  max: 5,
+  max: 15,
   message:
     'You try to connect too many times, please try again after 5 minutes',
   standardHeaders: true,
