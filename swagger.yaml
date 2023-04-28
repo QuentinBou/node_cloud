@@ -1,0 +1,375 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: API about wood and something else.
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      summary: Endpoint for login.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "test@example.com"
+                password:
+                  type: string
+                  example: "123456"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 0
+                  firstName:
+                    type: string
+                    example: "John"
+                  lastName:
+                    type: string
+                    example: "Doe"
+                  email:
+                    type: string
+                    example: "test@example.com"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiaWF0IjoxNjI0NjQ0NjQ2LCJleHAiOjE2"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Invalid email or password."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
+  /auth/register:
+    post:
+      summary: Endpoint for register.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "John"
+                lastName:
+                  type: string
+                  example: "Doe"
+                email:
+                  type: string
+                  example: "test@example.com"
+                password:
+                  type: string
+                  example: "123456"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 0
+                  firstName:
+                    type: string
+                    example: "John"
+                  lastName:
+                    type: string
+                    example: "Doe"
+                  email:
+                    type: string
+                    example: "encrypted-->text@example.com"
+                  password:
+                    type: string
+                    example: "hashed-->123456"
+                  createdAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Invalid email or password."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
+  /wood:
+    get:
+      summary: Endpoint for get all woods.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 0
+                    name:
+                      type: string
+                      example: "Wood 1"
+                    typeId:
+                      type: number
+                      example: 0
+                    hardnessId:
+                      type: number
+                      example: 0
+                    createdAt:
+                      type: string
+                      example: "2021-06-23T15:00:00.000Z"
+                    updatedAt:
+                      type: string
+                      example: "2021-06-23T15:00:00.000Z"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Woods not found."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
+    post:
+      summary: Endpoint for create a wood.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Wood 1"
+                typeId:
+                  type: number
+                  example: 0
+                hardnessId:
+                  type: number
+                  example: 0
+                image:
+                  type: string
+                  example: "image_upload.png"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 0
+                  name:
+                    type: string
+                    example: "Wood 1"
+                  typeId:
+                    type: number
+                    example: 0
+                  hardnessId:
+                    type: number
+                    example: 0
+                  image:
+                    type: string
+                    example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+                  createdAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Invalid name, type or hardness."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
+  /wood/{id}:
+    delete:
+      summary: Endpoint for delete a wood.
+      parameters:
+        - name: id
+          in: path
+          description: Wood id.
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Wood deleted"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Wood can not be deleted"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal Server Error."
+    put:
+      summary: Endpoint for update a wood.
+      parameters:
+        - name: id
+          in: path
+          description: Wood id.
+          required: true
+          schema:
+            type: number
+            example: 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Wood 1"
+                typeId:
+                  type: number
+                  example: 0
+                hardnessId:
+                  type: number
+                  example: 0
+                image:
+                  type: string
+                  example: "image_upload.png"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 0
+                  name:
+                    type: string
+                    example: "Wood 1"
+                  typeId:
+                    type: number
+                    example: 0
+                  hardnessId:
+                    type: number
+                    example: 0
+                  image:
+                    type: string
+                    example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+                  createdAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2021-06-23T15:00:00.000Z"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Invalid name, type or hardness."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
+  /wood/{hardnessId}:
+    get:
+      summary: Endpoint for get all woods by hardness.
+      parameters:
+        - name: hardnessId
+          in: path
+          description: Hardness id.
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 0
+                    name:
+                      type: string
+                      example: "Wood 1"
+                    typeId:
+                      type: number
+                      example: 0
+                    hardnessId:
+                      type: number
+                      example: 0
+                    image:
+                      type: string
+                      example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+                    createdAt:
+                      type: string
+                      example: "2021-06-23T15:00:00.000Z"
+                    updatedAt:
+                      type: string
+                      example: "2021-06-23T15:00:00.000Z"
+        400:
+          description: Bad Request
+          content:
+            text/plain:
+              example: "Woods not found."
+        500:
+          description: Internal Server Error
+          content:
+            text/plain:
+              example: "Internal Server Error."
