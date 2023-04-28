@@ -98,7 +98,7 @@ exports.createWood = async (req, res) => {
     }
 
     if (req.file) {
-      const pathname = `${req.protocol}://${req.get('host')}/uploads/${
+      const pathname = `${
         req.file.filename
       }`;
       newWood = {
