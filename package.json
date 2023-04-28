@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
     "dev": "nodemon server",
-    "migrate": "cd app && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && cd ..",
-    "build": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "migrate": "cd app && npx sequelize-cli db:drop --config config/config.js && npx sequelize-cli db:create --config config/config.js && npx sequelize-cli db:migrate --config config/config.js && npx sequelize-cli db:seed:all --config config/config.js && cd ..",
+    "build": "cd app && npx sequelize-cli db:migrate --config config/config.js && npx sequelize-cli db:seed:all --config config/config.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix"
   },
