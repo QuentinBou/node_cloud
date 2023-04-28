@@ -49,11 +49,11 @@ function uploadToS3(file) {
 module.exports = (req, res, next) => {
   upload(req, res, (error) => {
     if (error) {
-      return res.status(500).json({error: 'Upload failed'});
+      return res.status(500).json({message: 'Upload failed', error: error});
     }
 
     if (!req.file) {
-      return res.status(400).json({error: 'No file provided'});
+      return res.status(400).json({message: 'No file provided', error: error});
     }
 
     uploadToS3(req.file)
@@ -63,7 +63,10 @@ module.exports = (req, res, next) => {
         })
         .catch((err) => {
           console.log(err);
-          return res.status(500).json({error: 'Upload to S3 failed'});
+          return res.status(500).json({
+            message: 'Upload to S3 failed',
+            error: error,
+          });
         });
   });
 };
