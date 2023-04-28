@@ -21,8 +21,6 @@ if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
 }
 
-console.log(process.env.BUCKET);
-
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'uploads');

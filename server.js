@@ -16,6 +16,11 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+console.log(process.env.BUCKET);
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_ACCESS_KEY);
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
