@@ -4,7 +4,7 @@ info:
   description: API about wood and something else.
   version: 1.0.0
 paths:
-  /auth/login:
+  /api/auth/login:
     post:
       summary: Endpoint for login.
       requestBody:
@@ -52,7 +52,7 @@ paths:
           content:
             text/plain:
               example: "Internal Server Error."
-  /auth/register:
+  /api/auth/register:
     post:
       summary: Endpoint for register.
       requestBody:
@@ -112,7 +112,7 @@ paths:
           content:
             text/plain:
               example: "Internal Server Error."
-  /wood:
+  /api/wood:
     get:
       summary: Endpoint for get all woods.
       responses:
@@ -212,7 +212,7 @@ paths:
           content:
             text/plain:
               example: "Internal Server Error."
-  /wood/{id}:
+  /api/wood/{id}:
     delete:
       summary: Endpoint for delete a wood.
       parameters:
@@ -321,7 +321,7 @@ paths:
           content:
             text/plain:
               example: "Internal Server Error."
-  /wood/{hardnessId}:
+  /api/wood/{hardnessId}:
     get:
       summary: Endpoint for get all woods by hardness.
       parameters:
