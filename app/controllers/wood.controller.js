@@ -109,9 +109,13 @@ exports.createWood = async (req, res) => {
 
     const createdWood = await Wood.create(newWood);
 
+    await createdWood.save();
 
-    logger.info(`Wood ${createdWood.id} has been created`);
-    return res.status(201).json(createdWood);
+    const wood = await Wood.findByPk(createdWood.id, attributesFilter);
+    const woodWithLinks = await addLinksToWood(req, wood);
+
+    logger.info(`Wood ${woodWithLinks.id} has been created`);
+    return res.status(201).json(woodWithLinks);
   } catch (error) {
     logger.error(error.message);
     return res
@@ -144,8 +148,11 @@ exports.updateWood = async (req, res) => {
 
     await wood.update(updatedWood);
 
-    logger.info(`Wood ${wood.id} has been updated`);
-    return res.status(200).json(wood);
+    updatedWood = await Wood.findByPk(req.params.id, attributesFilter);
+    const woodWithLinks = await addLinksToWood(req, updatedWood);
+
+    logger.info(`Wood ${woodWithLinks.id} has been updated`);
+    return res.status(200).json(woodWithLinks);
   } catch (error) {
     logger.error(error.message);
     return res.status(400).json({message: 'Wood can not be updated'});
