@@ -16,9 +16,6 @@ app.get('/', (req, res) => {
   res.send(`
     <h1>Server is running</h1>
     <p>Go to <a href="/api-docs">/api-docs</a></p>
-    <p>${process.env.BUCKET}</p>
-    <p>${process.env.AWS_ACCESS_KEY_ID}</p>
-    <p>${process.env.AWS_SECRET_ACCESS_KEY}</p>
   `);
 });
 
